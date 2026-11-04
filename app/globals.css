@@ -1,26 +1,555 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@theme {
+  --color-*: initial;
+  --color-white: #ffffff;
+  --color-black: #000000;
+  --color-ink: #140b05;
+  --color-soil: #26150a;
+  --color-brown: #502d0e;
+  --color-rust: #6b3d16;
+  --color-clay: #9f7549;
+  --color-tan: #dec8b2;
+  --color-bone: #f6f4f2;
+  --color-gold: #ffe41e;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --animate-marquee: marquee 45s linear infinite;
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  @keyframes marquee {
+    to {
+      transform: translateX(-50%);
+    }
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@theme inline {
+  --font-sans: var(--font-geist-sans);
+  --font-label: var(--font-chakra-petch);
+  --font-display: var(--font-saira);
+}
+
+@layer base {
+  html {
+    color-scheme: dark;
+    background-color: var(--color-ink);
+  }
+
+  body {
+    background-color: var(--color-ink);
+    color: var(--color-bone);
+    font-family: var(--font-sans);
+  }
+
+  ::selection {
+    background-color: var(--color-gold);
+    color: var(--color-ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 3px;
+  }
+
+  /* Tailwind v4 leaves buttons with the default arrow cursor. */
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+}
+
+@utility frame {
+  width: 100%;
+  max-width: 88rem;
+  margin-inline: auto;
+  padding-inline: clamp(1.25rem, 4vw, 3rem);
+}
+
+@utility headline {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 900;
+  font-variation-settings: "wdth" 125;
+  text-transform: uppercase;
+  line-height: 0.9;
+  letter-spacing: -0.01em;
+}
+
+@utility eyebrow {
+  font-family: var(--font-label);
+  font-size: 0.75rem;
+  line-height: 1rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+}
+
+/* Frosted glass header: the page shows through blurred. Over light sections HeaderTone sets
+   data-tone="light", and the frost whitens and the nav turns dark so it
+   stays readable. */
+.site-header {
+  --nav-fg: var(--color-white);
+  --nav-muted: var(--color-tan);
+  --nav-accent: var(--color-gold);
+  --frost: rgb(20 11 5 / 0.22);
+}
+
+.site-header[data-tone="light"] {
+  --nav-fg: var(--color-ink);
+  --nav-muted: var(--color-brown);
+  --nav-accent: var(--color-ink);
+  --frost: rgb(255 255 255 / 0.45);
+}
+
+.glass-frost {
+  background-color: var(--frost);
+  backdrop-filter: blur(10px) saturate(1.5);
+  box-shadow:
+    inset 0 0 0 1px rgb(255 255 255 / 0.12),
+    inset 0 -12px 16px -12px rgb(255 255 255 / 0.16);
+  transition: background-color 0.3s;
+}
+
+/* The B's beveled corners, applied to the top-right corner of a box. */
+@utility chamfer {
+  clip-path: polygon(
+    0 0,
+    calc(100% - var(--chamfer, 1.5rem)) 0,
+    100% var(--chamfer, 1.5rem),
+    100% 100%,
+    0 100%
+  );
+}
+
+/* Stripes leaning at the same 8° as the L's upright stroke. */
+@utility stripes {
+  background-image: repeating-linear-gradient(
+    98deg,
+    transparent 0 14px,
+    color-mix(in oklab, currentColor 12%, transparent) 14px 16px
+  );
+}
+
+@utility reveal {
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      animation: reveal linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 70%;
+    }
+  }
+}
+
+@keyframes reveal {
+  from {
+    opacity: 0;
+    transform: translateY(2.5rem);
+  }
+}
+
+/* Logo intro, on every page load: the small mark on a gold screen gives way
+   to a big one painted in by slanted strokes, then the screen splits open
+   along the gap between the L and the B. */
+.intro {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  animation: intro-done 0s 2.1s forwards;
+}
+
+.intro-stage {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.intro-backdrop,
+.intro-panel polygon {
+  fill: var(--color-gold);
+}
+
+.intro-backdrop {
+  animation: intro-hide 0s 1.45s forwards;
+}
+
+.intro-stroke,
+.intro-mini {
+  fill: var(--color-ink);
+}
+
+.intro-mini {
+  animation: intro-mini 0.55s cubic-bezier(0.6, 0, 0.4, 1) both;
+}
+
+.intro-stroke {
+  animation: intro-stroke 0.34s cubic-bezier(0.7, 0, 0.3, 1) both;
+}
+
+.intro-streak {
+  fill: var(--color-white);
+  animation: intro-streak 0.5s cubic-bezier(0.3, 0, 0.2, 1) both;
+}
+
+.intro-shake {
+  animation: intro-shake 0.24s linear 1.08s;
+}
+
+.intro-caption {
+  position: absolute;
+  inset-inline: 0;
+  bottom: 2rem;
+  font-family: var(--font-label);
+  font-size: 0.75rem;
+  letter-spacing: 0.2em;
+  text-align: center;
+  text-transform: uppercase;
+  color: var(--color-ink);
+  animation: intro-hide 0.2s 1.3s forwards;
+}
+
+.intro-panel-l {
+  animation: intro-split-l 0.6s cubic-bezier(0.7, 0, 0.84, 0) 1.45s forwards;
+}
+
+.intro-panel-b {
+  animation: intro-split-b 0.6s cubic-bezier(0.7, 0, 0.84, 0) 1.45s forwards;
+}
+
+@keyframes intro-mini {
+  0%,
+  65% {
+    opacity: 1;
+    transform: scale(0.18);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+}
+
+/* Strokes and streaks lean at the same 8° as the L's upright. */
+@keyframes intro-stroke {
+  from {
+    transform: translateX(-330px) skewX(-8deg);
+  }
+  to {
+    transform: translateX(0) skewX(-8deg);
+  }
+}
+
+@keyframes intro-streak {
+  from {
+    opacity: 0;
+    transform: skewX(-8deg) translateX(0);
+  }
+  20% {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+    transform: skewX(-8deg) translateX(620px);
+  }
+}
+
+@keyframes intro-shake {
+  25% {
+    transform: translate(1.5px, -1px);
+  }
+  50% {
+    transform: translate(-1px, 1px);
+  }
+  75% {
+    transform: translate(0.5px, -0.5px);
+  }
+}
+
+@keyframes intro-split-l {
+  to {
+    transform: translate(-1200px, 1200px);
+  }
+}
+
+@keyframes intro-split-b {
+  to {
+    transform: translate(1200px, -1200px);
+  }
+}
+
+@keyframes intro-hide {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes intro-done {
+  to {
+    visibility: hidden;
+  }
+}
+
+:root[data-intro="skip"] .intro {
+  display: none;
+}
+
+/* Car archive: a full-screen <dialog> that wipes in from the right along the
+   logo's slant (14vh is the 8° lean across the full screen height). */
+.archive {
+  --wipe-closed: polygon(
+    calc(100% + 14vh) 0,
+    calc(100% + 14vh) 0,
+    calc(100% + 14vh) 100%,
+    100% 100%
+  );
+  margin: 0;
+  width: 100vw;
+  max-width: none;
+  height: 100dvh;
+  max-height: none;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  color: var(--color-bone);
+  /* --age goes from 0 at the newest car to 1 at the oldest, so the screen
+     warms toward Lehigh brown the further back you scroll. */
+  background-color: color-mix(
+    in oklab,
+    var(--color-ink),
+    var(--color-brown) calc(var(--age, 0) * 100%)
+  );
+  clip-path: var(--wipe-closed);
+  transition-property: clip-path, overlay, display, background-color;
+  transition-duration: 0.7s, 0.7s, 0.7s, 0.3s;
+  transition-timing-function: cubic-bezier(0.76, 0, 0.24, 1);
+  transition-behavior: allow-discrete;
+}
+
+.archive[open] {
+  clip-path: polygon(0 0, calc(100% + 14vh) 0, calc(100% + 14vh) 100%, -14vh 100%);
+}
+
+@starting-style {
+  .archive[open] {
+    clip-path: var(--wipe-closed);
+  }
+}
+
+.archive::backdrop {
+  background-color: transparent;
+}
+
+:root:has(.archive[open]) {
+  overflow: hidden;
+}
+
+:root:has(.campaign-bar:not([hidden])) {
+  --campaign-bar: 2.5rem;
+}
+
+/* Gallery lightbox: a full-screen <dialog> that fades in over the page. */
+.lightbox {
+  margin: 0;
+  width: 100vw;
+  max-width: none;
+  height: 100dvh;
+  max-height: none;
+  padding: 0;
+  border: 0;
+  color: var(--color-bone);
+  background-color: var(--color-ink);
+  opacity: 0;
+  transition-property: opacity, overlay, display;
+  transition-duration: 0.3s;
+  transition-behavior: allow-discrete;
+}
+
+.lightbox[open] {
+  opacity: 1;
+}
+
+@starting-style {
+  .lightbox[open] {
+    opacity: 0;
+  }
+}
+
+.lightbox::backdrop {
+  background-color: transparent;
+}
+
+:root:has(.lightbox[open]) {
+  overflow: hidden;
+}
+
+.lightbox-photo {
+  animation: lightbox-photo 0.35s cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+
+@keyframes lightbox-photo {
+  from {
+    opacity: 0;
+    transform: scale(0.97);
+  }
+}
+
+/* Competitions: the course draws itself, then its walls rise underneath. */
+.track-draw {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+  animation: draw-line 1.6s cubic-bezier(0.65, 0, 0.35, 1) 0.1s forwards;
+}
+
+.track-wall {
+  opacity: 0;
+  animation: fade-in 0.8s ease-out 0.9s forwards;
+}
+
+.track-glow {
+  filter: drop-shadow(0 0 6px color-mix(in oklab, var(--color-gold) 75%, transparent));
+}
+
+.track-grid {
+  background-image:
+    linear-gradient(color-mix(in oklab, var(--color-gold) 14%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in oklab, var(--color-gold) 14%, transparent) 1px, transparent 1px);
+  background-size: 2.5rem 2.5rem;
+}
+
+/* Races without a course map get a sketched loop instead. */
+.track-sketch {
+  fill: none;
+  stroke: color-mix(in oklab, var(--color-gold) 45%, transparent);
+  stroke-width: 2;
+  stroke-dasharray: 10 14;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+  animation: sketch-march 1.4s linear infinite;
+}
+
+@keyframes sketch-march {
+  to {
+    stroke-dashoffset: -24;
+  }
+}
+
+.track-pin {
+  animation: pin-rise 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) 1.5s both;
+}
+
+@keyframes pin-rise {
+  from {
+    opacity: 0;
+    transform: translateY(0.75rem);
+  }
+}
+
+/* Testing grounds: the course draws itself as it scrolls into view. */
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .grounds .track-draw {
+      animation: draw-line linear both;
+      animation-timeline: --grounds;
+      animation-range: entry 10% cover 45%;
+    }
+
+    .grounds .track-wall {
+      animation: fade-in linear both;
+      animation-timeline: --grounds;
+      animation-range: entry 40% cover 45%;
+    }
+
+    .grounds .track-pin {
+      animation: pin-rise linear both;
+      animation-timeline: --grounds;
+      animation-range: cover 35% cover 50%;
+    }
+  }
+}
+
+/* The B's bottom bevel on the page's bottom-right corner. Painted in the
+   footer's color, which shows through underneath, so keep the two in sync and
+   keep the footer's overlap (-mt-10) at least this tall. */
+.page-chamfer::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  z-index: 50;
+  width: 2.5rem;
+  height: 2.5rem;
+  background: var(--color-black);
+  clip-path: polygon(100% 0, 100% 100%, 0 100%);
+  pointer-events: none;
+}
+
+/* The page lifts off the footer, which waits underneath, pinned to the
+   bottom of the viewport. Only where the whole footer fits on screen. */
+@media (min-width: 48rem) and (min-height: 44rem) {
+  .footer-reveal {
+    position: sticky;
+    bottom: 0;
+  }
+}
+
+.scribble path,
+.signature path {
+  fill: none;
+  stroke: var(--color-gold);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 1;
+}
+
+.scribble path {
+  stroke-width: 5;
+}
+
+.signature path {
+  stroke-width: 7;
+  stroke-dashoffset: 1;
+  animation: draw-line 1.4s cubic-bezier(0.6, 0, 0.2, 1) 0.4s forwards;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  @supports (animation-timeline: view()) {
+    .scribble path {
+      animation: draw-line linear both;
+      animation-timeline: view();
+      animation-range: entry 60% cover 45%;
+    }
+  }
+}
+
+@keyframes draw-line {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes fade-in {
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .intro {
+    display: none;
+  }
+
+  .archive,
+  .lightbox {
+    transition: none;
+  }
+
+  .lightbox-photo,
+  .track-draw,
+  .track-wall,
+  .track-pin,
+  .track-sketch,
+  .signature path {
+    animation: none;
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
 }
