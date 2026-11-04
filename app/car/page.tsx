@@ -5,6 +5,7 @@ import { CarArchive } from "@/components/car-archive";
 import { PageTitle } from "@/components/page-title";
 import { Scramble } from "@/components/scramble";
 import { cars, competitions, socialLinks } from "@/lib/content";
+import { arrowUpRight } from "@/lib/glyphs";
 
 export const metadata: Metadata = {
   title: "CC11",
@@ -60,9 +61,10 @@ export default function CarPage() {
       </section>
 
       <section className="frame grid gap-14 pb-20 md:grid-cols-[3fr_2fr] md:items-end md:pb-28">
-        <div>
+        {/* Sized to the column so "announced" always fits on one line. */}
+        <div className="@container">
           <p className="eyebrow text-gold">Coming soon</p>
-          <h2 className="headline mt-4 text-[clamp(3rem,7.5vw,6.5rem)] text-white">
+          <h2 className="headline mt-4 text-[clamp(2rem,13cqi,6.5rem)] text-white">
             CC11 will be
             <br />
             <Scramble text="announced soon." className="text-gold" />
@@ -86,7 +88,7 @@ export default function CarPage() {
                     {label}
                   </span>
                   <span className="eyebrow text-tan transition-colors group-hover:text-white">
-                    {handle} ↗
+                    {handle} {arrowUpRight}
                   </span>
                 </a>
               </li>

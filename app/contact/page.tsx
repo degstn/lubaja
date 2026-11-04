@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { PageTitle } from "@/components/page-title";
 import { socialLinks } from "@/lib/content";
+import { arrowUpRight } from "@/lib/glyphs";
 import { site } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -34,7 +35,7 @@ export default function ContactPage() {
                   {label}
                 </span>
                 <span className="font-label text-sm text-tan transition-colors group-hover:text-white">
-                  {detail} <span aria-hidden="true">{external ? "↗" : "→"}</span>
+                  {detail} <span aria-hidden="true">{external ? arrowUpRight : "→"}</span>
                 </span>
               </a>
             </li>

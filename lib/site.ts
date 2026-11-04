@@ -1,7 +1,7 @@
 export const site = {
   name: "Lehigh Baja",
   shortName: "Lehigh Baja",
-  url: "https://lehighbaja.org",
+  url: "https://lehighbaja.com",
   tagline: "Design. Build. Send it.",
   season: "2026–27",
   description:

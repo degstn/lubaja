@@ -32,6 +32,9 @@
   html {
     color-scheme: dark;
     background-color: var(--color-ink);
+    /* Nothing should scroll sideways; this keeps one stray wide element from
+       letting phones pan the whole page left and right. */
+    overflow-x: clip;
   }
 
   body {

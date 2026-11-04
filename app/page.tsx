@@ -98,7 +98,7 @@ export default function Home() {
             <div className="flex flex-wrap items-end justify-between gap-6">
               <div>
                 <p className="eyebrow text-gold">Latest from the track</p>
-                <h2 className="headline mt-4 text-4xl text-white sm:text-5xl md:text-7xl">
+                <h2 className="headline mt-4 text-3xl text-white min-[360px]:text-4xl sm:text-5xl md:text-7xl">
                   {latest.name}
                 </h2>
               </div>

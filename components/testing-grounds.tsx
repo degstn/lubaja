@@ -17,7 +17,8 @@ const stats = [
 
 export function TestingGrounds() {
   return (
-    <section aria-labelledby="testing-grounds" className="frame">
+    // Clipped sideways: the road runs past the course and would widen the page.
+    <section aria-labelledby="testing-grounds" className="frame overflow-x-clip">
       <div className="grid items-center gap-x-16 gap-y-12 border-t border-white/10 py-20 md:py-28 lg:grid-cols-[minmax(0,24rem)_1fr]">
         <div>
           <p className="eyebrow text-clay">Home track</p>

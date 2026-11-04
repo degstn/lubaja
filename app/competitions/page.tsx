@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { RaceLog, type RaceView } from "@/components/race-log";
 import { TestingGrounds } from "@/components/testing-grounds";
 import { cars, competitionFormat, competitions } from "@/lib/content";
+import { arrowDownRight } from "@/lib/glyphs";
 import { tracks } from "@/lib/tracks";
 
 export const metadata: Metadata = {
@@ -72,10 +73,10 @@ export default function CompetitionsPage() {
           </dl>
           <div className="flex gap-3">
             <a href="#visualiser" className="eyebrow border border-white/30 px-4 py-2.5 text-white hover:border-gold hover:text-gold">
-              Track visualiser ↘
+              Track visualiser {arrowDownRight}
             </a>
             <a href="#race-list" className="eyebrow border border-white/30 px-4 py-2.5 text-white hover:border-gold hover:text-gold">
-              Race list ↘
+              Race list {arrowDownRight}
             </a>
           </div>
         </div>

@@ -15,7 +15,7 @@ import type { TrackId } from "./tracks";
 export const socialLinks = [
   { label: "Instagram", handle: "@lehighbaja", href: site.socials.instagram },
   { label: "YouTube", handle: "LU Baja", href: site.socials.youtube },
-  { label: "LinkedIn", handle: "Lehigh University Baja SAE", href: site.socials.linkedin },
+  { label: "LinkedIn", handle: "Lehigh Baja", href: site.socials.linkedin },
   { label: "Facebook", handle: "LU Baja", href: site.socials.facebook },
 ] as const;
 

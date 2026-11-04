@@ -150,7 +150,7 @@ export default function TeamPage() {
           <h2 className="headline text-4xl md:text-6xl">Interested in joining?</h2>
           <a
             href={`mailto:${site.email}`}
-            className="headline text-2xl underline decoration-2 underline-offset-8 focus-visible:outline-ink md:text-3xl"
+            className="headline text-2xl [overflow-wrap:anywhere] underline decoration-2 underline-offset-8 focus-visible:outline-ink md:text-3xl"
           >
             {site.email}
           </a>

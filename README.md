@@ -1,6 +1,6 @@
 # Lehigh Baja website
 
-The website for Lehigh University's Baja SAE team, at [lehighbaja.org](https://lehighbaja.org).
+The website for Lehigh University's Baja SAE team, at [lehighbaja.com](https://lehighbaja.com).
 
 It's built with [Next.js](https://nextjs.org) and [Tailwind CSS](https://tailwindcss.com) and hosted on [Vercel](https://vercel.com). Every page is static: there's no database, no logins, and no forms, so the site keeps running on its own. Most updates are edits to a few data files in `lib/`.
 
