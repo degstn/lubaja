@@ -29,7 +29,7 @@ If all three pass, the site will build on Vercel too.
 
 ## Deploying
 
-Vercel builds the site from this GitHub repo. Pushing to `main` updates the live site in a minute or two. Pushing any other branch gets you a preview link, which is a good way to show changes before they go live.
+Vercel builds the site from this GitHub repo, and anything merged into `main` goes live in a minute or two, so don't push to `main` directly. Instead, put your changes on a branch and open a pull request: Vercel adds a preview link to the pull request so you can check your changes on a real URL, and the webmaster reviews and merges it. If you don't have access to the repo, email inlubaja@lehigh.edu to get added.
 
 ## What's where
 
@@ -87,5 +87,6 @@ Next.js resizes images for you, so full-size photos are fine.
 - **Fonts:** Saira for headlines, Geist for body text, Chakra Petch for small labels. They're set up in `app/layout.tsx`.
 - **Course maps** on the Competitions page are outlines stored in `lib/tracks.ts`, traced from official event maps and the team's own drawing of the testing grounds. A race shows one when its entry has a `track`, like `track: "hogbackHill"`. Without one, the card says "Course map coming soon".
 - **Old links** from the previous WordPress site redirect to the right pages. The redirects are in `next.config.ts`.
+- **Visitor stats** come from Vercel Web Analytics (`<Analytics />` in `app/layout.tsx`) and show up in the project's Analytics tab on Vercel. It doesn't use cookies.
 - **Upgrades:** nothing has to be updated to keep the site online. Every few years Vercel drops support for old Node.js versions, and new deploys fail until Node and Next.js are updated. The Next.js upgrade guides cover it.
-- This project uses Next.js 16, which differs from many older tutorials. Its docs come with it in `node_modules/next/dist/docs/`.
+- This project uses Next.js 16, check the docs at `node_modules/next/dist/docs/` if something is not working as expected.

@@ -1,3 +1,4 @@
+import { Analytics } from "@vercel/analytics/next";
 import type { Metadata, Viewport } from "next";
 import { Chakra_Petch, Geist, Saira } from "next/font/google";
 import { CampaignBar } from "@/components/campaign-bar";
@@ -93,6 +94,7 @@ export default function RootLayout({
             __html: JSON.stringify(organizationJsonLd).replace(/</g, "\\u003c"),
           }}
         />
+        <Analytics />
       </body>
     </html>
   );
