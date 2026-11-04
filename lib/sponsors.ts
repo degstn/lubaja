@@ -41,13 +41,8 @@ export const sponsors: Sponsor[] = [
   { name: "King Coatings", logo: kingCoatings, url: "https://king-coatings.com/" },
   { name: "Frazier Industrial", logo: frazier, url: "https://frazier.com/" },
   { name: "ASME", logo: asme, url: "https://www.asme.org/" },
-  {
-    name: "Gene Haas Foundation",
-    logo: geneHaas,
-    url: "https://www.ghaasfoundation.org/",
-    dark: true,
-  },
+  { name: "Gene Haas Foundation", logo: geneHaas, url: "https://www.ghaasfoundation.org/" },
   { name: "Dorman Products", logo: dorman, url: "https://www.dormanproducts.com/" },
-  { name: "Five Rivers Fabrication", logo: fiveRivers, url: "https://fiveriversfab.com/", dark: true },
+  { name: "Five Rivers Fabrication", logo: fiveRivers, url: "https://fiveriversfab.com/" },
   { name: "Aremac", wordmark: "aremac", url: "https://www.aremac.tech/" },
 ];

@@ -99,6 +99,43 @@
   --frost: rgb(255 255 255 / 0.45);
 }
 
+/* The header keeps its place in the page, but the bar inside is fixed
+   because Safari carries sticky elements along when the page bounces at its
+   ends. As the campaign bar scrolls away, the bar slides up to dock at the
+   top, the way sticky would. */
+.site-header {
+  position: relative;
+  height: 4rem;
+}
+
+.header-bar {
+  position: fixed;
+  inset-inline: 0;
+  top: var(--campaign-bar, 0rem);
+  animation: header-dock linear both;
+  animation-timeline: scroll(root);
+  animation-range: 0 var(--campaign-bar, 0rem);
+}
+
+@keyframes header-dock {
+  to {
+    top: 0;
+  }
+}
+
+@supports not (animation-timeline: scroll()) {
+  .site-header {
+    position: sticky;
+    top: 0;
+    height: auto;
+  }
+
+  .header-bar {
+    position: static;
+    animation: none;
+  }
+}
+
 .glass-frost {
   background-color: var(--frost);
   backdrop-filter: blur(10px) saturate(1.5);

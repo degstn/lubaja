@@ -21,10 +21,20 @@ export function SiteNav() {
     const closeOnEscape = (event: KeyboardEvent) => {
       if (event.key === "Escape") setOpenOn(null);
     };
+    // Links to the page you're already on, like the logo on the homepage,
+    // don't change the pathname, so close on any link in the header. Wait
+    // until the click is done: unmounting the menu mid-click drops the link's
+    // own handler, and the browser falls back to a full page load.
+    const header = document.querySelector(".site-header");
+    const closeOnLink = (event: Event) => {
+      if (event.target instanceof Element && event.target.closest("a")) setTimeout(() => setOpenOn(null));
+    };
     document.addEventListener("keydown", closeOnEscape);
+    header?.addEventListener("click", closeOnLink);
     document.body.style.overflow = "hidden";
     return () => {
       document.removeEventListener("keydown", closeOnEscape);
+      header?.removeEventListener("click", closeOnLink);
       document.body.style.overflow = "";
     };
   }, [open]);
@@ -77,8 +87,8 @@ export function SiteNav() {
           aria-controls="mobile-nav"
           onClick={(event) => {
             // The campaign bar can push the header down until it scrolls away.
-            const header = event.currentTarget.closest("header");
-            setMenuTop(header?.getBoundingClientRect().bottom ?? 0);
+            const bar = event.currentTarget.closest(".header-bar");
+            setMenuTop(bar?.getBoundingClientRect().bottom ?? 0);
             setOpenOn(open ? null : pathname);
           }}
           className="-mr-2 flex size-11 flex-col items-center justify-center gap-[5px] text-(--nav-fg) transition-colors duration-300"

@@ -1,36 +1,91 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Lehigh Baja website
 
-## Getting Started
+The website for Lehigh University's Baja SAE team, at [lehighbaja.org](https://lehighbaja.org).
 
-First, run the development server:
+It's built with [Next.js](https://nextjs.org) and [Tailwind CSS](https://tailwindcss.com) and hosted on [Vercel](https://vercel.com). Every page is static: there's no database, no logins, and no forms, so the site keeps running on its own. Most updates are edits to a few data files in `lib/`.
+
+## Run it locally
+
+You need [Node.js](https://nodejs.org) 20.9 or newer.
 
 ```bash
+npm install   # first time only
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Then open [http://localhost:6767](http://localhost:6767). The page updates as you save files.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+**Testing on your phone:** put your phone on the same Wi-Fi and open `http://<your computer's IP>:6767`. During development, Next.js blocks the site's scripts when it's opened from another address, so first add your computer's IP to `allowedDevOrigins` in `next.config.ts`. On a Mac, `ipconfig getifaddr en0` prints the IP.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Before you push
 
-## Learn More
+```bash
+npm run lint
+npx tsc --noEmit
+npm run build
+```
 
-To learn more about Next.js, take a look at the following resources:
+If all three pass, the site will build on Vercel too.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Deploying
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Vercel builds the site from this GitHub repo. Pushing to `main` updates the live site in a minute or two. Pushing any other branch gets you a preview link, which is a good way to show changes before they go live.
 
-## Deploy on Vercel
+## What's where
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```
+app/          One folder per page (team, car, competitions, gallery, contact, sponsor).
+              app/page.tsx is the homepage, app/layout.tsx wraps every page, and
+              app/globals.css has the colors, fonts, and animations.
+components/   Pieces used across pages: header, footer, intro animation, course maps.
+lib/          The site's content. See "Updating content".
+assets/       Photos and logos the pages use: team leads, gallery, sponsors.
+public/       Files served as-is, like the sponsorship guide PDF and app icons.
+scripts/      npm run logo rebuilds the favicon, app icons, and lib/logo-paths.ts
+              from public/lubajalogov1.svg.
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Updating content
+
+Most of the site is generated from lists in `lib/`. To add something, copy an existing entry and edit it.
+
+| To update | Edit |
+| --- | --- |
+| Email, social links, donate link, tagline, season | `site` in `lib/site.ts` |
+| Navigation menu | `nav` in `lib/site.ts` |
+| Crowdfunding bar | `campaign` in `lib/site.ts`. It hides itself after `endsAt`. |
+| Team leads | `leads` in `lib/content.ts`, photos in `assets/leads/` |
+| Races | `competitions` in `lib/content.ts`, newest first |
+| Cars | `cars` in `lib/content.ts`, newest first. The first one is the car on the CC11 page. |
+| Sponsors | `sponsors` in `lib/sponsors.ts`, logos in `assets/sponsors/` |
+| Gallery | `albums` in `lib/gallery.ts`, photos in `assets/gallery/` |
+
+**Photos and logos** are imported at the top of the file, then used in an entry:
+
+```ts
+import jamesKimble from "@/assets/leads/james-kimble.jpg";
+// ...
+{ name: "James Kimble", roles: ["Team Captain"], linkedin: "https://...", photo: jamesKimble },
+```
+
+Next.js resizes images for you, so full-size photos are fine.
+
+**Sponsors** need either a `logo` or, if there's no logo file, a `wordmark` (their name set in type). Add `dark: true` for logos meant for a black background, and a `url` to link the tile to their site.
+
+**Gallery albums** are grouped by race, and each album's `competition` has to match a race `name` in `lib/content.ts`. That's where the album gets its dates.
+
+### New season checklist
+
+- Update `leads`, and add the new car to the top of `cars`.
+- Change `season` in `lib/site.ts`.
+- Search the project for last year (for example `2026`) to catch labels like "2026 season sponsors" and "2026–27 team leads".
+- Update `campaign` in `lib/site.ts` if there's a crowdfunding campaign.
+
+## Good to know
+
+- **Colors** live in two places: `app/globals.css` for the site, and `colors` in `lib/site.ts` for the share image and the browser's theme color. Keep them in sync.
+- **Fonts:** Saira for headlines, Geist for body text, Chakra Petch for small labels. They're set up in `app/layout.tsx`.
+- **Course maps** on the Competitions page are outlines stored in `lib/tracks.ts`, traced from official event maps and the team's own drawing of the testing grounds. A race shows one when its entry has a `track`, like `track: "hogbackHill"`. Without one, the card says "Course map coming soon".
+- **Old links** from the previous WordPress site redirect to the right pages. The redirects are in `next.config.ts`.
+- **Upgrades:** nothing has to be updated to keep the site online. Every few years Vercel drops support for old Node.js versions, and new deploys fail until Node and Next.js are updated. The Next.js upgrade guides cover it.
+- This project uses Next.js 16, which differs from many older tutorials. Its docs come with it in `node_modules/next/dist/docs/`.

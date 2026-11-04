@@ -26,12 +26,13 @@ export function HeaderTone() {
 
   useEffect(() => {
     const header = document.querySelector<HTMLElement>(".site-header");
-    if (!header) return;
+    const bar = header?.querySelector(".header-bar");
+    if (!header || !bar) return;
     let frame = 0;
 
     const update = () => {
       frame = 0;
-      const { bottom } = header.getBoundingClientRect();
+      const { bottom } = bar.getBoundingClientRect();
       const y = bottom - 28;
       const votes = [0.25, 0.5, 0.75].map((share) => {
         const hit = document
